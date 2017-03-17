@@ -39,7 +39,9 @@ module.exports = (grunt) ->
                         'src/scripts/history.coffee'
                         'src/scripts/styles.coffee'
                         'src/scripts/tools.coffee'
+
                         # Custom tools
+                        'src/custom/scripts/time-tools.coffee'
                         'src/custom/scripts/common-tools.coffee'
                         'src/custom/scripts/color-tools.coffee'
                     ]

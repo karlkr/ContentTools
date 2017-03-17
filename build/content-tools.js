@@ -10890,4 +10890,243 @@
 
   })(ContentTools.Tool);
 
+  TimeTool = (function(_super) {
+    __extends(TimeTool, _super);
+
+    function TimeTool() {
+      return TimeTool.__super__.constructor.apply(this, arguments);
+    }
+
+    ContentTools.ToolShelf.stow(TimeTool, 'time');
+
+    TimeTool.label = 'Time';
+
+    TimeTool.icon = 'time';
+
+    TimeTool.tagName = 'time';
+
+    TimeTool.apply = function(element, selection, callback) {
+      var allowScrolling, app, dialog, domElement, from, measureSpan, modal, rect, selectTag, to, transparent, _ref;
+      element.storeState();
+      selectTag = new HTMLString.Tag('span', {
+        'class': 'ct--puesdo-select'
+      });
+      _ref = selection.get(), from = _ref[0], to = _ref[1];
+      element.content = element.content.format(from, to, selectTag);
+      element.updateInnerHTML();
+      app = ContentTools.EditorApp.get();
+      modal = new ContentTools.ModalUI(transparent = true, allowScrolling = true);
+      modal.addEventListener('click', function() {
+        this.unmount();
+        dialog.hide();
+        element.content = element.content.unformat(from, to, selectTag);
+        element.updateInnerHTML();
+        element.restoreState();
+        return callback(false);
+      });
+      domElement = element.domElement();
+      measureSpan = domElement.getElementsByClassName('ct--puesdo-select');
+      rect = measureSpan[0].getBoundingClientRect();
+      dialog = new TimeDialog(this.getDatetime(element, selection));
+      dialog.position([rect.left + (rect.width / 2) + window.scrollX, rect.top + (rect.height / 2) + window.scrollY]);
+      dialog.addEventListener('save', function(ev) {
+        var datetime, time;
+        datetime = ev.detail().datetime;
+        element.content = element.content.unformat(from, to, 'time');
+        if (datetime) {
+          time = new HTMLString.Tag('time', {
+            datetime: datetime
+          });
+          element.content = element.content.format(from, to, time);
+        }
+        element.updateInnerHTML();
+        element.taint();
+        modal.unmount();
+        dialog.hide();
+        element.content = element.content.unformat(from, to, selectTag);
+        element.updateInnerHTML();
+        element.restoreState();
+        return callback(true);
+      });
+      app.attach(modal);
+      app.attach(dialog);
+      modal.show();
+      return dialog.show();
+    };
+
+    TimeTool.getDatetime = function(element, selection) {
+      var c, from, selectedContent, tag, to, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+      _ref = selection.get(), from = _ref[0], to = _ref[1];
+      selectedContent = element.content.slice(from, to);
+      _ref1 = selectedContent.characters;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        c = _ref1[_i];
+        if (!c.hasTags('time')) {
+          continue;
+        }
+        _ref2 = c.tags();
+        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+          tag = _ref2[_j];
+          if (tag.name() === 'a') {
+            return tag.attr('href');
+          }
+        }
+        return '';
+      }
+    };
+
+    return TimeTool;
+
+  })(ContentTools.Tools.Bold);
+
+  TimeDialog = (function(_super) {
+    __extends(TimeDialog, _super);
+
+    function TimeDialog() {
+      return TimeDialog.__super__.constructor.apply(this, arguments);
+    }
+
+    TimeDialog.prototype.mount = function() {
+      TimeDialog.__super__.mount.call(this);
+      this._domInput.setAttribute('name', 'time');
+      this._domInput.setAttribute('placeholder', 'Enter a date/time/duration...');
+      return this._domElement.removeChild(this._domTargetButton);
+    };
+
+    TimeDialog.prototype.save = function() {
+      var detail;
+      detail = {
+        datetime: this._domInput.value.trim()
+      };
+      return this.dispatchEvent(this.createEvent('save', detail));
+    };
+
+    return TimeDialog;
+
+  })(ContentTools.LinkDialog);
+
+  Strong = (function(_super) {
+    __extends(Strong, _super);
+
+    function Strong() {
+      return Strong.__super__.constructor.apply(this, arguments);
+    }
+
+    ContentTools.ToolShelf.stow(Strong, 'strong');
+
+    Strong.label = 'Strong';
+
+    Strong.icon = 'bold';
+
+    Strong.tagName = 'strong';
+
+    return Strong;
+
+  })(ContentTools.Tools.Bold);
+
+  Emphasize = (function(_super) {
+    __extends(Emphasize, _super);
+
+    function Emphasize() {
+      return Emphasize.__super__.constructor.apply(this, arguments);
+    }
+
+    ContentTools.ToolShelf.stow(Emphasize, 'em');
+
+    Emphasize.label = 'Emphasize';
+
+    Emphasize.icon = 'italic';
+
+    Emphasize.tagName = 'em';
+
+    return Emphasize;
+
+  })(ContentTools.Tools.Bold);
+
+  Event = (function(_super) {
+    __extends(Event, _super);
+
+    function Event() {
+      return Event.__super__.constructor.apply(this, arguments);
+    }
+
+    ContentTools.ToolShelf.stow(Event, 'event');
+
+    Event.label = 'Event';
+
+    Event.icon = 'event';
+
+    Event.className = 'event';
+
+    return Event;
+
+  })(ContentTools.Tools.AlignLeft);
+
+  RedColor = (function(_super) {
+    __extends(RedColor, _super);
+
+    function RedColor() {
+      return RedColor.__super__.constructor.apply(this, arguments);
+    }
+
+    ContentTools.ToolShelf.stow(RedColor, 'red');
+
+    RedColor.label = 'Red';
+
+    RedColor.icon = 'red';
+
+    RedColor.tagName = 'span';
+
+    RedColor.canApply = function(element, selection) {
+      if (!element.content) {
+        return false;
+      }
+      return selection && !selection.isCollapsed();
+    };
+
+    RedColor.isApplied = function(element, selection) {
+      var from, to, _ref;
+      if (element.content === void 0 || !element.content.length()) {
+        return false;
+      }
+      _ref = selection.get(), from = _ref[0], to = _ref[1];
+      if (from === to) {
+        to += 1;
+      }
+      return element.content.slice(from, to).hasTags(this.tagName, true);
+    };
+
+    RedColor.apply = function(element, selection, callback) {
+      var from, to, toolDetail, _ref;
+      toolDetail = {
+        'tool': this,
+        'element': element,
+        'selection': selection
+      };
+      if (!this.dispatchEditorEvent('tool-apply', toolDetail)) {
+        return;
+      }
+      element.storeState();
+      _ref = selection.get(), from = _ref[0], to = _ref[1];
+      if (this.isApplied(element, selection)) {
+        element.content = element.content.unformat(from, to, new HTMLString.Tag(this.tagName, {
+          'style': 'color:red'
+        }));
+      } else {
+        element.content = element.content.format(from, to, new HTMLString.Tag(this.tagName, {
+          'style': 'color:red'
+        }));
+      }
+      element.content.optimize();
+      element.updateInnerHTML();
+      element.taint();
+      element.restoreState();
+      callback(true);
+      return this.dispatchEditorEvent('tool-applied', toolDetail);
+    };
+
+    return RedColor;
+
+  })(ContentTools.Tool);
+
 }).call(this);

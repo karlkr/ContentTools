@@ -165,6 +165,7 @@
         &--bold:before           { content: "\ea62"; }
         &--heading:before        { content: "H"    ; font-weight: bold; }
         &--subheading:before     { content: "H"    ; }
+        &--subsubheading:before  { content: "H"    ; font-size:0.8em;}
         &--paragraph:before      { content: "P"    ; }
         &--preformatted:before   { content: "\ea80"; }
         &--italic:before         { content: "\ea64"; }

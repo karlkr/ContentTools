@@ -14,7 +14,7 @@ module.exports = (grunt) ->
             build:
                 files:
                     'src/tmp/content-tools.js': [
-                        'src/scripts/namespace.coffee',
+                        'src/scripts/namespace.coffee'
 
                         # UI
                         'src/scripts/ui/ui.coffee'
@@ -39,6 +39,9 @@ module.exports = (grunt) ->
                         'src/scripts/history.coffee'
                         'src/scripts/styles.coffee'
                         'src/scripts/tools.coffee'
+                        # Custom tools
+                        'src/custom/scripts/common-tools.coffee'
+                        'src/custom/scripts/color-tools.coffee'
                     ]
 
             sandbox:
@@ -76,6 +79,7 @@ module.exports = (grunt) ->
                         'src/spec/history.coffee'
                         'src/spec/tools.coffee'
                         'src/spec/styles.coffee'
+
                         ]
 
         sass:

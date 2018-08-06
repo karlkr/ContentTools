@@ -5544,7 +5544,7 @@
 }).call(this);
 
 (function() {
-  var AttributeUI, ContentTools, CropMarksUI, StyleUI, exports, _EditorApp,
+  var AttributeUI, ContentTools, CropMarksUI, Emphasize, Event, RedColor, Strong, StyleUI, exports, _EditorApp,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
@@ -10727,121 +10727,6 @@
     return Remove;
 
   })(ContentTools.Tool);
-
-  TimeTool = (function(_super) {
-    __extends(TimeTool, _super);
-
-    function TimeTool() {
-      return TimeTool.__super__.constructor.apply(this, arguments);
-    }
-
-    ContentTools.ToolShelf.stow(TimeTool, 'time');
-
-    TimeTool.label = 'Time';
-
-    TimeTool.icon = 'time';
-
-    TimeTool.tagName = 'time';
-
-    TimeTool.apply = function(element, selection, callback) {
-      var allowScrolling, app, dialog, domElement, from, measureSpan, modal, rect, selectTag, to, transparent, _ref;
-      element.storeState();
-      selectTag = new HTMLString.Tag('span', {
-        'class': 'ct--puesdo-select'
-      });
-      _ref = selection.get(), from = _ref[0], to = _ref[1];
-      element.content = element.content.format(from, to, selectTag);
-      element.updateInnerHTML();
-      app = ContentTools.EditorApp.get();
-      modal = new ContentTools.ModalUI(transparent = true, allowScrolling = true);
-      modal.addEventListener('click', function() {
-        this.unmount();
-        dialog.hide();
-        element.content = element.content.unformat(from, to, selectTag);
-        element.updateInnerHTML();
-        element.restoreState();
-        return callback(false);
-      });
-      domElement = element.domElement();
-      measureSpan = domElement.getElementsByClassName('ct--puesdo-select');
-      rect = measureSpan[0].getBoundingClientRect();
-      dialog = new TimeDialog(this.getDatetime(element, selection));
-      dialog.position([rect.left + (rect.width / 2) + window.scrollX, rect.top + (rect.height / 2) + window.scrollY]);
-      dialog.addEventListener('save', function(ev) {
-        var datetime, time;
-        datetime = ev.detail().datetime;
-        element.content = element.content.unformat(from, to, 'time');
-        if (datetime) {
-          time = new HTMLString.Tag('time', {
-            datetime: datetime
-          });
-          element.content = element.content.format(from, to, time);
-        }
-        element.updateInnerHTML();
-        element.taint();
-        modal.unmount();
-        dialog.hide();
-        element.content = element.content.unformat(from, to, selectTag);
-        element.updateInnerHTML();
-        element.restoreState();
-        return callback(true);
-      });
-      app.attach(modal);
-      app.attach(dialog);
-      modal.show();
-      return dialog.show();
-    };
-
-    TimeTool.getDatetime = function(element, selection) {
-      var c, from, selectedContent, tag, to, _i, _j, _len, _len1, _ref, _ref1, _ref2;
-      _ref = selection.get(), from = _ref[0], to = _ref[1];
-      selectedContent = element.content.slice(from, to);
-      _ref1 = selectedContent.characters;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        c = _ref1[_i];
-        if (!c.hasTags('time')) {
-          continue;
-        }
-        _ref2 = c.tags();
-        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-          tag = _ref2[_j];
-          if (tag.name() === 'a') {
-            return tag.attr('href');
-          }
-        }
-        return '';
-      }
-    };
-
-    return TimeTool;
-
-  })(ContentTools.Tools.Bold);
-
-  TimeDialog = (function(_super) {
-    __extends(TimeDialog, _super);
-
-    function TimeDialog() {
-      return TimeDialog.__super__.constructor.apply(this, arguments);
-    }
-
-    TimeDialog.prototype.mount = function() {
-      TimeDialog.__super__.mount.call(this);
-      this._domInput.setAttribute('name', 'time');
-      this._domInput.setAttribute('placeholder', 'Enter a date/time/duration...');
-      return this._domElement.removeChild(this._domTargetButton);
-    };
-
-    TimeDialog.prototype.save = function() {
-      var detail;
-      detail = {
-        datetime: this._domInput.value.trim()
-      };
-      return this.dispatchEvent(this.createEvent('save', detail));
-    };
-
-    return TimeDialog;
-
-  })(ContentTools.LinkDialog);
 
   Strong = (function(_super) {
     __extends(Strong, _super);

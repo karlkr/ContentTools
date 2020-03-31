@@ -44,6 +44,7 @@ module.exports = (grunt) ->
                         'src/custom/scripts/time-tools.coffee'
                         'src/custom/scripts/common-tools.coffee'
                         'src/custom/scripts/color-tools.coffee'
+                        'src/custom/scripts/ui/admin.coffee'
                     ]
 
             sandbox:
@@ -92,7 +93,7 @@ module.exports = (grunt) ->
             build:
                 files:
                     'build/content-tools.min.css':
-                        'src/styles/content-tools.scss'
+                        'src/custom/styles/custom-content-tools.scss'
 
             sandbox:
                 files:

@@ -1,0 +1,89 @@
+
+.ct-widget {
+
+    &.ct-admin {
+
+        /**
+         * Position of the switch on the page
+         */
+        right: 66px;
+        position: fixed;
+        top: 16px;
+
+
+        /**
+         * Depending on the current state of the switch we show either the edit
+         * button (page ready to edit), or the confirm and cancel buttons (
+         * page currently being edited).
+         */
+        .ct-admin__button {
+            display: block;
+        }
+
+        &--ready {
+            .ct-admin__button--go {
+                display: block;
+            }
+        }
+    }
+
+    .ct-admin {
+
+        /**
+         * The ignition switch is constructed of 3 buttons, edit, confirm and
+         * cancel.
+         */
+        $buttonSize: 48px;
+
+        &__button {
+
+            // Set the base appeance of the button
+            border-radius: $buttonSize / 2;
+            content: '';
+            cursor: pointer;
+            display: block;
+            height: $buttonSize;
+            line-height: $buttonSize;
+            opacity: 0.9;
+            position: absolute;
+            text-align: center;
+            @include type-icons($font-size: 24px);
+            width: $buttonSize;
+
+            // Each button displays an icon
+            &:before {
+                color: white;
+            }
+
+            /* Edit button */
+            &--go {
+                $bkg-color: $edit-action-color;
+                background: $bkg-color;
+
+                /**
+                 * Unlike the confirm and cancel buttons we rotate the edit
+                 * button's pencil icon on mouse over to add a sense of
+                 * purpose :)
+                 */
+                &:before {
+                    content: '\e994';
+                    @include transition-property(transform);
+                    @include transition-duration(0.1s);
+                    @include transition-timing-function(ease-in);
+                }
+
+                &:hover {
+                    background: lighten($bkg-color, 5%);
+
+                    &:before {
+                        display: inline-block;
+                        @include transform(rotate(-15deg));
+                    }
+                }
+            }
+
+        } // __button
+
+    } // .ct-admin
+
+} // .ct-widget
